@@ -134,7 +134,7 @@ and not exists (
 
 
 
-
+---------- Query Time --------------
 -- List customers who have an order prior to the last order of a customer
 -- named Jerald Berray and are residents of Austin.
 -- Jerald Berray isimli müþterinin son sipariþinden önce sipariþ vermiþ
