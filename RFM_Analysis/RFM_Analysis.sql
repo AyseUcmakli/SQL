@@ -459,15 +459,14 @@ PIVOT
 ORDER BY OrderMonth;
 
 
---
+--PRODUCTLINE'a göre toplam satýþlarý ve yýllara göre bu toplamlarý içeren bir tablo olacaktýr. 
 SELECT
     *
-FROM
+FROM 
     (
         SELECT 
-            YEAR_ID
+            YEAR_ID,
             PRODUCTLINE,
-
             SALES
         FROM sales_data_sample
     ) AS DENEME
@@ -478,3 +477,5 @@ PIVOT
   )
  AS PivotTable
 ORDER BY 2 DESC;
+
+
