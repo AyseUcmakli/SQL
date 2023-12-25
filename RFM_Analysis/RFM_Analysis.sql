@@ -467,6 +467,7 @@ FROM
         SELECT 
             YEAR_ID
             PRODUCTLINE,
+
             SALES
         FROM sales_data_sample
     ) AS DENEME
