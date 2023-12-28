@@ -407,6 +407,7 @@ order by 4 desc
 
 
 select * from sales_data_sample
+
 --En Fazla Ürün Çeþidi Satýn Alan Müþteriler:
 SELECT
     CUSTOMERNAME,
