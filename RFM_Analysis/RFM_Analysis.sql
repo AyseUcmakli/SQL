@@ -50,7 +50,7 @@ where YEAR_ID = 2003 and MONTH_ID = 11 --change year to see the rest
 group by  MONTH_ID, PRODUCTLINE
 order by 3 desc
 
---RFM ANALYSİS
+--RFM ANALYSÃS
 ---*Recency   : last order date
 ---*Frequency :count of total orders
 ---*Monetary  :total spend
@@ -72,14 +72,14 @@ group by CUSTOMERNAME
 SELECT  CUSTOMERNAME ,
 		sum(SALES) MonetaryValue,
 		avg(SALES) AvgMonetaryValue,
-		count(ORDERNUMBER) Frequency,--Her müşteri için sipariş sayısını bulur.
-		max(ORDERDATE) last_order_date,--Her müşterinin en son yapılan siparişin tarihini bulur.
-		(select max(ORDERDATE) from [dbo].[sales_data_sample]) max_order_date--Tüm müşterilerin sipariş verdiği tarihin en yenisini bulur.
+		count(ORDERNUMBER) Frequency,--Her mÃ¼Ã¾teri iÃ§in sipariÃ¾ sayÃ½sÃ½nÃ½ bulur.
+		max(ORDERDATE) last_order_date,--Her mÃ¼Ã¾terinin en son yapÃ½lan sipariÃ¾in tarihini bulur.
+		(select max(ORDERDATE) from [dbo].[sales_data_sample]) max_order_date--TÃ¼m mÃ¼Ã¾terilerin sipariÃ¾ verdiÃ°i tarihin en yenisini bulur.
 from [dbo].[sales_data_sample]
 group by CUSTOMERNAME
 
 
---- müşterilerin toplam satış, ortalama satış, sipariş sayısı, en son sipariş tarihi ve genel olarak en yeni sipariş tarihini gösterir. 
+--- mÃ¼Ã¾terilerin toplam satÃ½Ã¾, ortalama satÃ½Ã¾, sipariÃ¾ sayÃ½sÃ½, en son sipariÃ¾ tarihi ve genel olarak en yeni sipariÃ¾ tarihini gÃ¶sterir. 
 
 select 
 		CUSTOMERNAME, 
@@ -93,9 +93,9 @@ from [dbo].[sales_data_sample]
 group by CUSTOMERNAME
 
 
--- müşteri bazında RFM analizine dayalı istatistiksel bilgileri içeren bir tablo oluşturur ve bu tablodan tüm sütunları seçer
+-- mÃ¼Ã¾teri bazÃ½nda RFM analizine dayalÃ½ istatistiksel bilgileri iÃ§eren bir tablo oluÃ¾turur ve bu tablodan tÃ¼m sÃ¼tunlarÃ½ seÃ§er
 
-;with rfm as -- "rfm" adında bir geçici tablo (Common Table Expression - CTE) oluşturur
+;with rfm as -- "rfm" adÃ½nda bir geÃ§ici tablo (Common Table Expression - CTE) oluÃ¾turur
 (
 	select 
 		CUSTOMERNAME, 
@@ -108,12 +108,12 @@ group by CUSTOMERNAME
 	from [dbo].[sales_data_sample]
 	group by CUSTOMERNAME
 )
-SELECT r.* FROM rfm r -- Oluşturulan rfm geçici tablosundan tüm sütunları seçer.
+SELECT r.* FROM rfm r -- OluÃ¾turulan rfm geÃ§ici tablosundan tÃ¼m sÃ¼tunlarÃ½ seÃ§er.
 
 
 
---RFM analizi sonuçlarına dayalı olarak müşterileri Recency, Frequency ve MonetaryValue özelliklerine göre dört eşit gruba böler.
-;with rfm as -- "rfm" adında bir geçici tablo (Common Table Expression - CTE) oluşturur
+--RFM analizi sonuÃ§larÃ½na dayalÃ½ olarak mÃ¼Ã¾terileri Recency, Frequency ve MonetaryValue Ã¶zelliklerine gÃ¶re dÃ¶rt eÃ¾it gruba bÃ¶ler.
+;with rfm as -- "rfm" adÃ½nda bir geÃ§ici tablo (Common Table Expression - CTE) oluÃ¾turur
 (
 	select 
 		CUSTOMERNAME, 
@@ -127,13 +127,13 @@ SELECT r.* FROM rfm r -- Oluşturulan rfm geçici tablosundan tüm sütunları seçer.
 	group by CUSTOMERNAME
 )
 SELECT r.* ,
-       NTILE(4) OVER (order by Recency desc) rfm_recency,--Recency değerlerini büyükten küçüğe sıralayarak her müşteriyi dört eşit gruba böler (dört kuartile).
-	   NTILE(4) OVER (order by Frequency) rfm_frequency,--Frequency değerlerini küçükten büyüğe sıralayarak her müşteriyi dört eşit gruba böler.
-	   NTILE(4) OVER (order by MonetaryValue) rfm_monetary--MonetaryValue değerlerini küçükten büyüğe sıralayarak her müşteriyi dört eşit gruba böler.
+       NTILE(4) OVER (order by Recency desc) rfm_recency,--Recency deÃ°erlerini bÃ¼yÃ¼kten kÃ¼Ã§Ã¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler (dÃ¶rt kuartile).
+	   NTILE(4) OVER (order by Frequency) rfm_frequency,--Frequency deÃ°erlerini kÃ¼Ã§Ã¼kten bÃ¼yÃ¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler.
+	   NTILE(4) OVER (order by MonetaryValue) rfm_monetary--MonetaryValue deÃ°erlerini kÃ¼Ã§Ã¼kten bÃ¼yÃ¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler.
 FROM rfm r
 
 ---NEXT
-;with rfm as -- "rfm" adında bir geçici tablo (Common Table Expression - CTE) oluşturur
+;with rfm as -- "rfm" adÃ½nda bir geÃ§ici tablo (Common Table Expression - CTE) oluÃ¾turur
 (
 	SELECT 
 		CUSTOMERNAME, 
@@ -145,24 +145,24 @@ FROM rfm r
 		DATEDIFF(DD, max(ORDERDATE), (select max(ORDERDATE) from [dbo].[sales_data_sample])) Recency
 	FROM [dbo].[sales_data_sample]
 	GROUP BY CUSTOMERNAME
-),--Yukarıda rfm adında geçici tablo(CTE)oluşturdu.
+),--YukarÃ½da rfm adÃ½nda geÃ§ici tablo(CTE)oluÃ¾turdu.
 rfm_calc as
 (
 SELECT r.* ,
-       NTILE(4) OVER (order by Recency desc) rfm_recency,--Recency değerlerini büyükten küçüğe sıralayarak her müşteriyi dört eşit gruba böler (dört kuartile).
-	   NTILE(4) OVER (order by Frequency) rfm_frequency,--Frequency değerlerini küçükten büyüğe sıralayarak her müşteriyi dört eşit gruba böler.
-	   NTILE(4) OVER (order by MonetaryValue) rfm_monetary--MonetaryValue değerlerini küçükten büyüğe sıralayarak her müşteriyi dört eşit gruba böler.
+       NTILE(4) OVER (order by Recency desc) rfm_recency,--Recency deÃ°erlerini bÃ¼yÃ¼kten kÃ¼Ã§Ã¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler (dÃ¶rt kuartile).
+	   NTILE(4) OVER (order by Frequency) rfm_frequency,--Frequency deÃ°erlerini kÃ¼Ã§Ã¼kten bÃ¼yÃ¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler.
+	   NTILE(4) OVER (order by MonetaryValue) rfm_monetary--MonetaryValue deÃ°erlerini kÃ¼Ã§Ã¼kten bÃ¼yÃ¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler.
 FROM rfm r
-)--Ardından, rfm_calc adında bir başka CTE oluşturulur. Bu CTE, rfm tablosundan gelen verileri kullanarak her bir müşteriyi Recency,
---Frequency ve MonetaryValue değerlerine göre dört eşit gruba bölen NTILE fonksiyonu kullanılarak RFM segmentlerini hesaplar.
+)--ArdÃ½ndan, rfm_calc adÃ½nda bir baÃ¾ka CTE oluÃ¾turulur. Bu CTE, rfm tablosundan gelen verileri kullanarak her bir mÃ¼Ã¾teriyi Recency,
+--Frequency ve MonetaryValue deÃ°erlerine gÃ¶re dÃ¶rt eÃ¾it gruba bÃ¶len NTILE fonksiyonu kullanÃ½larak RFM segmentlerini hesaplar.
 SELECT c.*, rfm_recency+ rfm_frequency+ rfm_monetary as rfm_cell
 FROM rfm_calc c
---Bu son sorgu, rfm_calc tablosundan gelen verilerle birlikte her bir müşterinin RFM hücre değerini (rfm_cell) içeren sonuç kümesini döndürür. 
---RFM hücre değeri, Recency, Frequency ve MonetaryValue değerlerinin toplamıdır.
---Bu değer, müşteriyi belirli bir segmente yerleştirmek için kullanılabilir. 
+--Bu son sorgu, rfm_calc tablosundan gelen verilerle birlikte her bir mÃ¼Ã¾terinin RFM hÃ¼cre deÃ°erini (rfm_cell) iÃ§eren sonuÃ§ kÃ¼mesini dÃ¶ndÃ¼rÃ¼r. 
+--RFM hÃ¼cre deÃ°eri, Recency, Frequency ve MonetaryValue deÃ°erlerinin toplamÃ½dÃ½r.
+--Bu deÃ°er, mÃ¼Ã¾teriyi belirli bir segmente yerleÃ¾tirmek iÃ§in kullanÃ½labilir. 
 
 --NEXT
-;with rfm as -- "rfm" adında bir geçici tablo (Common Table Expression - CTE) oluşturur
+;with rfm as -- "rfm" adÃ½nda bir geÃ§ici tablo (Common Table Expression - CTE) oluÃ¾turur
 (
 	SELECT 
 		CUSTOMERNAME, 
@@ -174,13 +174,13 @@ FROM rfm_calc c
 		DATEDIFF(DD, max(ORDERDATE), (select max(ORDERDATE) from [dbo].[sales_data_sample])) Recency
 	FROM [dbo].[sales_data_sample]
 	GROUP BY CUSTOMERNAME
-),--Yukarıda rfm adında geçici tablo(CTE)oluşturdu.
+),--YukarÃ½da rfm adÃ½nda geÃ§ici tablo(CTE)oluÃ¾turdu.
 rfm_calc as
 (
-SELECT r.* ,-- ifadesi, rfm tablosundaki tüm sütunları seçer.
-       NTILE(4) OVER (order by Recency desc) rfm_recency,--Recency değerlerini büyükten küçüğe sıralayarak her müşteriyi dört eşit gruba böler (dört kuartile).
-	   NTILE(4) OVER (order by Frequency) rfm_frequency,--Frequency değerlerini küçükten büyüğe sıralayarak her müşteriyi dört eşit gruba böler.
-	   NTILE(4) OVER (order by MonetaryValue) rfm_monetary--MonetaryValue değerlerini küçükten büyüğe sıralayarak her müşteriyi dört eşit gruba böler.
+SELECT r.* ,-- ifadesi, rfm tablosundaki tÃ¼m sÃ¼tunlarÃ½ seÃ§er.
+       NTILE(4) OVER (order by Recency desc) rfm_recency,--Recency deÃ°erlerini bÃ¼yÃ¼kten kÃ¼Ã§Ã¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler (dÃ¶rt kuartile).
+	   NTILE(4) OVER (order by Frequency) rfm_frequency,--Frequency deÃ°erlerini kÃ¼Ã§Ã¼kten bÃ¼yÃ¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler.
+	   NTILE(4) OVER (order by MonetaryValue) rfm_monetary--MonetaryValue deÃ°erlerini kÃ¼Ã§Ã¼kten bÃ¼yÃ¼Ã°e sÃ½ralayarak her mÃ¼Ã¾teriyi dÃ¶rt eÃ¾it gruba bÃ¶ler.
 FROM rfm r
 )
 SELECT c.*, rfm_recency+ rfm_frequency+ rfm_monetary as rfm_cell,
@@ -189,10 +189,10 @@ FROM rfm_calc c
 
 
 ---NEXT
---IF OBJECT_ID('tempdb..#rfm') IS NOT NULL DROP TABLE #rfm; BU KISIM ALTERNATİF YÖNTEM
+--IF OBJECT_ID('tempdb..#rfm') IS NOT NULL DROP TABLE #rfm; BU KISIM ALTERNATÃF YÃ–NTEM
 
-DROP TABLE IF EXISTS #rfm--Eğer #rfm adında bir geçici tablo zaten varsa, bu tabloyu siler. 
-                          --Bu, her sorgu çalıştığında temiz bir başlangıç sağlamak için yapılır.
+DROP TABLE IF EXISTS #rfm--EÃ°er #rfm adÃ½nda bir geÃ§ici tablo zaten varsa, bu tabloyu siler. 
+                          --Bu, her sorgu Ã§alÃ½Ã¾tÃ½Ã°Ã½nda temiz bir baÃ¾langÃ½Ã§ saÃ°lamak iÃ§in yapÃ½lÃ½r.
 ;with rfm as 
 (
 	select 
@@ -209,7 +209,7 @@ DROP TABLE IF EXISTS #rfm--Eğer #rfm adında bir geçici tablo zaten varsa, bu tab
 rfm_calc as
 (
 
-	select r.*,-- ifadesi, rfm tablosundaki tüm sütunları seçer.
+	select r.*,-- ifadesi, rfm tablosundaki tÃ¼m sÃ¼tunlarÃ½ seÃ§er.
 		NTILE(4) OVER (order by Recency desc) rfm_recency,
 		NTILE(4) OVER (order by Frequency) rfm_frequency,
 		NTILE(4) OVER (order by MonetaryValue) rfm_monetary
@@ -220,12 +220,12 @@ select
 	cast(rfm_recency as varchar) + cast(rfm_frequency as varchar) + cast(rfm_monetary  as varchar)rfm_cell_string
 into #rfm
 from rfm_calc c
---SELECT ... INTO #rfm ...: Bu kısım, rfm_calc tablosundan gelen verilerle birlikte, her bir müşterinin RFM hücre değerini (rfm_cell)
---içeren sonuç kümesini oluşturur ve bu verileri #rfm adındaki geçici tabloya ekler. Ayrıca, rfm_recency, rfm_frequency, 
---ve rfm_monetary değerlerini birleştirerek bir karakter dizesi oluşturup rfm_cell_string adında bir sütun oluşturur.
+--SELECT ... INTO #rfm ...: Bu kÃ½sÃ½m, rfm_calc tablosundan gelen verilerle birlikte, her bir mÃ¼Ã¾terinin RFM hÃ¼cre deÃ°erini (rfm_cell)
+--iÃ§eren sonuÃ§ kÃ¼mesini oluÃ¾turur ve bu verileri #rfm adÃ½ndaki geÃ§ici tabloya ekler. AyrÃ½ca, rfm_recency, rfm_frequency, 
+--ve rfm_monetary deÃ°erlerini birleÃ¾tirerek bir karakter dizesi oluÃ¾turup rfm_cell_string adÃ½nda bir sÃ¼tun oluÃ¾turur.
 
 
---KONTROL EDELİM..
+--KONTROL EDELÃM..
 SELECT *
 FROM #rfm
 
@@ -234,8 +234,8 @@ FROM #rfm
 
 
 ----Who is our best customer (this could be best answered with RFM)
-DROP TABLE IF EXISTS #rfm--Eğer #rfm adında bir geçici tablo zaten varsa, bu tabloyu siler. 
-                         --Bu, her sorgu çalıştığında temiz bir başlangıç sağlamak için yapılır.
+DROP TABLE IF EXISTS #rfm--EÃ°er #rfm adÃ½nda bir geÃ§ici tablo zaten varsa, bu tabloyu siler. 
+                         --Bu, her sorgu Ã§alÃ½Ã¾tÃ½Ã°Ã½nda temiz bir baÃ¾langÃ½Ã§ saÃ°lamak iÃ§in yapÃ½lÃ½r.
 ;with rfm as 
 (
 	select 
@@ -267,7 +267,7 @@ FROM rfm_calc c
 SELECT CUSTOMERNAME , rfm_recency, rfm_frequency, rfm_monetary,
 	CASE
 		WHEN rfm_cell_string in (111, 112 , 121, 122, 123, 132, 211, 212, 114, 141) THEN 'lost_customers'  --lost customers
-		WHEN rfm_cell_string in (133, 134, 143, 244, 334, 343, 344, 144) then 'slipping away, cannot lose' -- (Big spenders who haven’t purchased lately) slipping away
+		WHEN rfm_cell_string in (133, 134, 143, 244, 334, 343, 344, 144) then 'slipping away, cannot lose' -- (Big spenders who havenÂ’t purchased lately) slipping away
 		WHEN rfm_cell_string in (311, 411, 331) THEN 'new customers'
 		WHEN rfm_cell_string in (222, 223, 233, 322) THEN 'potential churners'
 		WHEN rfm_cell_string in (323, 333,321, 422, 332, 432) THEN 'active' --(Customers who buy often & recently, but at low price points)
@@ -304,9 +304,9 @@ ORDER BY
 
 
 
-----Aşagıdaki sorgu 'Shipped' durumundaki siparişlerin her birinin sipariş numarasını ve her bir siparişin kaç defa tekrarlandığını
-----içeren bir sonuç kümesini döndürür. rn sütunu, her bir siparişin tekrar sayısını gösterir.
-SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sütununu ve bu sütundaki değerlerin kaç defa tekrarlandığını sayan bir sayacı (rn) içerir.
+----AÃ¾agÃ½daki sorgu 'Shipped' durumundaki sipariÃ¾lerin her birinin sipariÃ¾ numarasÃ½nÃ½ ve her bir sipariÃ¾in kaÃ§ defa tekrarlandÃ½Ã°Ã½nÃ½
+----iÃ§eren bir sonuÃ§ kÃ¼mesini dÃ¶ndÃ¼rÃ¼r. rn sÃ¼tunu, her bir sipariÃ¾in tekrar sayÃ½sÃ½nÃ½ gÃ¶sterir.
+SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sÃ¼tununu ve bu sÃ¼tundaki deÃ°erlerin kaÃ§ defa tekrarlandÃ½Ã°Ã½nÃ½ sayan bir sayacÃ½ (rn) iÃ§erir.
 FROM [dbo].[sales_data_sample]
 WHERE STATUS = 'Shipped'
 GROUP BY ORDERNUMBER
@@ -315,16 +315,16 @@ GROUP BY ORDERNUMBER
 --SELECT * FROM [dbo].[sales_data_sample] WHERE ORDERNUMBER= 10411
 
 --NEXT
---Bu SQL sorgusu, [dbo].[sales_data_sample] tablosundan "Shipped" (gönderilmiş) durumundaki siparişleri içeren ve her bir sipariş
---numarasının kaç defa tekrarlandığını sayan bir alt sorgu içerir. Daha sonra, bu alt sorgunun sonucunda elde edilen geçici tablo 
---veya sonuç kümesi üzerinde rn (row number) değeri 3 olan sipariş numaralarını seçer.
+--Bu SQL sorgusu, [dbo].[sales_data_sample] tablosundan "Shipped" (gÃ¶nderilmiÃ¾) durumundaki sipariÃ¾leri iÃ§eren ve her bir sipariÃ¾
+--numarasÃ½nÃ½n kaÃ§ defa tekrarlandÃ½Ã°Ã½nÃ½ sayan bir alt sorgu iÃ§erir. Daha sonra, bu alt sorgunun sonucunda elde edilen geÃ§ici tablo 
+--veya sonuÃ§ kÃ¼mesi Ã¼zerinde rn (row number) deÃ°eri 3 olan sipariÃ¾ numaralarÃ½nÃ½ seÃ§er.
 SELECT ORDERNUMBER FROM
    (
-	SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sütununu ve bu sütundaki değerlerin kaç defa tekrarlandığını sayan bir sayacı (rn) içerir.(row number)
+	SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sÃ¼tununu ve bu sÃ¼tundaki deÃ°erlerin kaÃ§ defa tekrarlandÃ½Ã°Ã½nÃ½ sayan bir sayacÃ½ (rn) iÃ§erir.(row number)
 	FROM [dbo].[sales_data_sample]
 	WHERE STATUS = 'Shipped'
 	GROUP BY ORDERNUMBER
-	)m--oluşturulan geçici tabloya bir takma ad (alias) verir
+	)m--oluÃ¾turulan geÃ§ici tabloya bir takma ad (alias) verir
 WHERE rn = 3
 
 
@@ -334,18 +334,18 @@ FROM [dbo].[sales_data_sample]
 WHERE ORDERNUMBER IN(
 	SELECT ORDERNUMBER FROM
 	   (
-		SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sütununu ve bu sütundaki değerlerin kaç defa tekrarlandığını sayan bir sayacı (rn) içerir.(row number)
+		SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sÃ¼tununu ve bu sÃ¼tundaki deÃ°erlerin kaÃ§ defa tekrarlandÃ½Ã°Ã½nÃ½ sayan bir sayacÃ½ (rn) iÃ§erir.(row number)
 		FROM [dbo].[sales_data_sample]
 		WHERE STATUS = 'Shipped'
 		GROUP BY ORDERNUMBER
-		)m--oluşturulan geçici tabloya bir takma ad (alias) verir
+		)m--oluÃ¾turulan geÃ§ici tabloya bir takma ad (alias) verir
 	WHERE rn = 2
 	)
-	FOR XML PATH('')--SQL sorgusunda, sonuç kümesini bir XML belgesine dönüştürmek için kullanılır. Bu ifade, 
-	                --sorgu sonuçlarını XML formatında birleştirilmiş bir dize olarak döndürmeye olanak tanır.
+	FOR XML PATH('')--SQL sorgusunda, sonuÃ§ kÃ¼mesini bir XML belgesine dÃ¶nÃ¼Ã¾tÃ¼rmek iÃ§in kullanÃ½lÃ½r. Bu ifade, 
+	                --sorgu sonuÃ§larÃ½nÃ½ XML formatÃ½nda birleÃ¾tirilmiÃ¾ bir dize olarak dÃ¶ndÃ¼rmeye olanak tanÃ½r.
 
 --NEXTTT
-SELECT stuff(  --STUFF fonksiyonu ise baştaki virgülü kaldırarak düzgün birleşmiş bir dize elde etmeye yardımcı olur.
+SELECT stuff(  --STUFF fonksiyonu ise baÃ¾taki virgÃ¼lÃ¼ kaldÃ½rarak dÃ¼zgÃ¼n birleÃ¾miÃ¾ bir dize elde etmeye yardÃ½mcÃ½ olur.
 
 	(SELECT ',' + PRODUCTCODE
 	 FROM [dbo].[sales_data_sample]
@@ -353,12 +353,12 @@ SELECT stuff(  --STUFF fonksiyonu ise baştaki virgülü kaldırarak düzgün birleşmi
 	      (
 		   SELECT ORDERNUMBER FROM
 		   (
-			SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sütununu ve bu sütundaki değerlerin kaç defa tekrarlandığını sayan bir sayacı (rn) içerir.(row number)
+			SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sÃ¼tununu ve bu sÃ¼tundaki deÃ°erlerin kaÃ§ defa tekrarlandÃ½Ã°Ã½nÃ½ sayan bir sayacÃ½ (rn) iÃ§erir.(row number)
 			FROM [dbo].[sales_data_sample]
 			WHERE STATUS = 'Shipped'
 			GROUP BY ORDERNUMBER
-			)m--oluşturulan geçici tabloya bir takma ad (alias) verir
-		WHERE rn = 2--(yani, iki farklı ürün içeren siparişler)
+			)m--oluÃ¾turulan geÃ§ici tabloya bir takma ad (alias) verir
+		WHERE rn = 2--(yani, iki farklÃ½ Ã¼rÃ¼n iÃ§eren sipariÃ¾ler)
 		)
 		FOR XML PATH(''))
 		,1,1,'')
@@ -373,11 +373,11 @@ SELECT DISTINCT ORDERNUMBER, STUFF(
 	      (
 		   SELECT ORDERNUMBER 
 		   FROM(
-			   SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sütununu ve bu sütundaki değerlerin kaç defa tekrarlandığını sayan bir sayacı (rn) içerir.(row number)
+			   SELECT ORDERNUMBER, count(*) rn-- ORDERNUMBER sÃ¼tununu ve bu sÃ¼tundaki deÃ°erlerin kaÃ§ defa tekrarlandÃ½Ã°Ã½nÃ½ sayan bir sayacÃ½ (rn) iÃ§erir.(row number)
 			   FROM [dbo].[sales_data_sample]
 			   WHERE STATUS = 'Shipped'
 			   GROUP BY ORDERNUMBER
-			    )m--oluşturulan geçici tabloya bir takma ad (alias) verir
+			    )m--oluÃ¾turulan geÃ§ici tabloya bir takma ad (alias) verir
 		   WHERE rn = 2
 		  )
 	  AND p.ORDERNUMBER = s.ORDERNUMBER
@@ -408,7 +408,7 @@ order by 4 desc
 
 select * from sales_data_sample
 
---En Fazla Ürün Çeşidi Satın Alan Müşteriler:
+--En Fazla ÃœrÃ¼n Ã‡eÃ¾idi SatÃ½n Alan MÃ¼Ã¾teriler:
 SELECT
     CUSTOMERNAME,
     COUNT(DISTINCT PRODUCTCODE) AS UniqueProductsCount
@@ -417,7 +417,7 @@ GROUP BY CUSTOMERNAME
 ORDER BY UniqueProductsCount DESC;
 
 
---Her Müşteri İçin En Yüksek Tutarlı Sipariş:
+--Her MÃ¼Ã¾teri ÃÃ§in En YÃ¼ksek TutarlÃ½ SipariÃ¾:
 SELECT 
     CUSTOMERNAME,
     ORDERNUMBER,
@@ -427,15 +427,15 @@ GROUP BY CUSTOMERNAME, ORDERNUMBER
 ORDER BY MaxOrderAmount DESC;
 
 
----Bu sorgu, her bir ayın altında farklı ürün kategorileri ve bu kategorilere ait toplam satışları içeren bir pivot tablosu oluşturur. 
-WITH OrderCategoryTotals AS --geçici bir tablo (CTE) oluşturulur. Bu tablo, sipariş tarihlerini yıl ve ay düzeyinde gruplandırır
-                             --ve her bir ürün kategorisi için toplam satış miktarını hesaplar.
+---Bu sorgu, her bir ayÃ½n altÃ½nda farklÃ½ Ã¼rÃ¼n kategorileri ve bu kategorilere ait toplam satÃ½Ã¾larÃ½ iÃ§eren bir pivot tablosu oluÃ¾turur. 
+WITH OrderCategoryTotals AS --geÃ§ici bir tablo (CTE) oluÃ¾turulur. Bu tablo, sipariÃ¾ tarihlerini yÃ½l ve ay dÃ¼zeyinde gruplandÃ½rÃ½r
+                             --ve her bir Ã¼rÃ¼n kategorisi iÃ§in toplam satÃ½Ã¾ miktarÃ½nÃ½ hesaplar.
   (
 	SELECT
-        CONVERT(VARCHAR(7), ORDERDATE, 120) AS OrderMonth,--VARCHAR(7): Bu, dönüştürülen karakter dizisinin maksimum uzunluğunu belirtir.
-		                                                  --Yani, en fazla 7 karakter uzunluğunda bir karakter dizisi oluşturulacaktır.
-														  --120: Bu, tarih ve saat biçimini belirten bir stil kodudur. 120 stili, 
-														  --"yyyy-mm" yıl ve ay formatındaki bir tarih biçimini ifade eder.
+        CONVERT(VARCHAR(7), ORDERDATE, 120) AS OrderMonth,--VARCHAR(7): Bu, dÃ¶nÃ¼Ã¾tÃ¼rÃ¼len karakter dizisinin maksimum uzunluÃ°unu belirtir.
+		                                                  --Yani, en fazla 7 karakter uzunluÃ°unda bir karakter dizisi oluÃ¾turulacaktÃ½r.
+														  --120: Bu, tarih ve saat biÃ§imini belirten bir stil kodudur. 120 stili, 
+														  --"yyyy-mm" yÃ½l ve ay formatÃ½ndaki bir tarih biÃ§imini ifade eder.
         PRODUCTLINE,
         SUM(SALES) AS TotalSales
     FROM [dbo].[sales_data_sample]
@@ -460,7 +460,7 @@ PIVOT
 ORDER BY OrderMonth;
 
 
---PRODUCTLINE'a göre toplam satışları ve yıllara göre bu toplamları içeren bir tablo olacaktır. 
+--PRODUCTLINE'a gÃ¶re toplam satÃ½Ã¾larÃ½ ve yÃ½llara gÃ¶re bu toplamlarÃ½ iÃ§eren bir tablo olacaktÃ½r. 
 SELECT
     *
 FROM 
@@ -475,7 +475,7 @@ PIVOT
    (
     SUM(SALES)
     FOR YEAR_ID IN ([2003], [2004], [2005])
-  )
+   )
  AS PivotTable
 ORDER BY 2 DESC;
 
